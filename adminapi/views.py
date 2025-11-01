@@ -96,6 +96,26 @@ class InvitationViewSet(viewsets.GenericViewSet,
         invitation.save()
 
         return Response({'detail': 'account created'}, status=201)
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def revoke(self, request, pk=None):
+        """Revoke (cancel) an existing invitation by ID."""
+        invitation = self.get_object()
+
+        # hanya admin boleh revoke invitation
+
+        if request.user.role != 'admin':
+            return Response({'detail': 'Forbidden'}, status=403)
+
+        # kalau sudah dipakai / expired, tidak bisa di revoke lagi
+        if getattr(invitation, 'is_used', False) or invitation.is_used:
+            return Response({'detail': 'Invitation already used or revoked'}, status=400)
+
+        # ubah status
+        invitation.is_used = True
+        invitation.save()
+
+        return Response({'detail': 'Invitation revoked successfully'}, status=200)
     
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
