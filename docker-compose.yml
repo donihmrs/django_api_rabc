@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  django_api_doni:
+    build: .
+    container_name: django_api_doni
+    environment:
+      DEBUG: False
+      SECRET_KEY: KEYRAHASIAKELUARGA12345@@@
+      DB_NAME: django-rabc-doni-db
+      DB_USER: root
+      DB_PASSWORD: rabc-doni-999
+      DB_HOST: db_api_doni
+      DB_PORT: 3306
+    depends_on:
+      - db_api_doni
+    networks:
+      - rabc_doni_network
+    ports:
+      - "8890:8000"
+    restart: always
+
+  db_api_doni:
+    image: mariadb:latest
+    container_name: django-rabc-doni-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rabc-doni-999
+      MYSQL_DATABASE: django-rabc-doni-db
+      MYSQL_USER: rabc_user
+      MYSQL_PASSWORD: rabc-doni-999
+    volumes:
+      - mariadb_api_doni_data:/var/lib/mysql
+    networks:
+      - rabc_doni_network
+    ports:
+      - "3308:3306"
+    restart: unless-stopped
+
+volumes:
+  mariadb_api_doni_data:
+
+networks:
+  rabc_doni_network:
+    driver: bridge
+    name: rabc_doni_network

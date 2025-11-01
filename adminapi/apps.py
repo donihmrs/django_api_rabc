@@ -1,0 +1,9 @@
+from django.apps import AppConfig
+
+
+class AdminapiConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'adminapi'
+
+    def ready(self):
+        import adminapi.signals

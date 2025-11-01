@@ -1,0 +1,9 @@
+.env
+__pycache__
+.qodo
+venv
+*.pyc
+.DS_Store
+.idea
+.vscode
+*.log
