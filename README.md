@@ -372,8 +372,10 @@ curl -s -X POST http://localhost:8890/api/logout \
 
 ## OpenAPI / Swagger
 
-You can add automatic API docs by installing `drf-spectacular` or `drf-yasg`. Not included by default.
-
+```
+  - http://localhost:8890/api/docs/redoc
+  - http://localhost:8890/api/docs/swagger
+```
 ---
 
 ## License
