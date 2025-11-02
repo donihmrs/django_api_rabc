@@ -1,6 +1,39 @@
 from rest_framework import serializers
 from .models import User, Product, Order, Invitation
+import base64
+import json
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .permissions import ROLE_PERMISSIONS
 
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        user = self.user
+
+        # encode data profile
+        user_profile = {
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'role': user.role
+        }
+
+        user_profile_json = json.dumps(user_profile)
+        user_profile_base64 = base64.b64encode(user_profile_json.encode('utf-8')).decode('utf-8')
+        data['profile'] = user_profile_base64
+
+        # Ambil permissions
+        role_perm = ROLE_PERMISSIONS.get(user.role, {})
+
+        # Encode ke base64
+        role_perm_json = json.dumps(role_perm)  # dict → JSON string
+        role_perm_base64 = base64.b64encode(role_perm_json.encode('utf-8')).decode('utf-8')
+
+        data['permissions'] = role_perm_base64
+
+        return data
+    
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(read_only=True)
     class Meta:

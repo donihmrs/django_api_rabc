@@ -1,6 +1,27 @@
 from rest_framework import permissions
 
 
+ROLE_PERMISSIONS = {
+    'admin': {
+        'users': {'read': True, 'write': True, 'delete': True , 'update': True},
+        'products': {'read': True, 'write': True, 'delete': True , 'update': True},
+        'orders': {'read': True, 'write': True, 'delete': True , 'update': True},
+        'invitations': {'read': True, 'write': True, 'delete': True , 'update': True},
+    },
+    'manager': {
+        'users': {'read': True, 'write': False, 'delete': False, 'update': False},
+        'products': {'read': True, 'write': False, 'delete': False, 'update': True},
+        'orders': {'read': True, 'write': False, 'delete': False, 'update': False},
+        'invitations': {'read': True, 'write': True, 'delete': False, 'update': True},
+    },
+    'staff': {
+        'users': {'read': False, 'write': False , 'delete': False , 'update': False},
+        'products': {'read': True, 'write': False, 'delete': False, 'update': False},
+        'orders': {'read': False, 'write': False, 'delete': False, 'update': False},
+        'invitations': {'read': False, 'write': False, 'delete': False, 'update': False},
+    }
+}
+
 class UserPermission(permissions.BasePermission):
     """
     Role-based permission untuk User model:

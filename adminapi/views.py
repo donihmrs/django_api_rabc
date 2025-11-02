@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import viewsets, mixins, status, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -8,8 +7,9 @@ from rest_framework.views import APIView
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import User, Product, Order, Invitation
-from .serializers import UserSerializer, AdminCreateUserSerializer, ProductSerializer, OrderSerializer, InvitationSerializer
+from .serializers import CustomTokenObtainPairSerializer, UserSerializer, AdminCreateUserSerializer, ProductSerializer, OrderSerializer, InvitationSerializer
 from .permissions import UserPermission, ProductPermission, OrderPermission
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -17,7 +17,7 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [UserPermission]
 
     lookup_field = 'username'
-    
+
     def get_serializer_class(self):
         if self.request.user and self.request.user.role == 'admin' and self.action == 'create':
             return AdminCreateUserSerializer
@@ -48,7 +48,7 @@ class InvitationViewSet(viewsets.GenericViewSet,
     serializer_class = InvitationSerializer
     permission_classes = [IsAuthenticated]
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request):
         if request.user.role not in ('admin', 'manager'):
             return Response({'detail': 'Forbidden'}, status=403)
 
@@ -76,7 +76,7 @@ class InvitationViewSet(viewsets.GenericViewSet,
             return Response({'detail': 'Invalid or expired token'}, status=400)
         except Exception as e:
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         if not invitation.is_valid():
             return Response({'detail': 'invitation invalid or expired'}, status=400)
 
@@ -134,3 +134,6 @@ class LogoutView(APIView):
             return Response({"detail": "Successfully logged out"}, status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response({"detail": "Invalid or expired token"}, status=status.HTTP_400_BAD_REQUEST)
+    
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer  
