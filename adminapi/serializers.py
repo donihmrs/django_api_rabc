@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import User, Product, Order, Invitation
 
 class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(read_only=True)
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'role', 'first_name', 'last_name']

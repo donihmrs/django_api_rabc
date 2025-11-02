@@ -16,6 +16,8 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [UserPermission]
 
+    lookup_field = 'username'
+    
     def get_serializer_class(self):
         if self.request.user and self.request.user.role == 'admin' and self.action == 'create':
             return AdminCreateUserSerializer
