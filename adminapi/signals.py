@@ -17,3 +17,31 @@ def create_default_admin(sender, **kwargs):
                 is_staff=True,
             )
             print("Default admin user created: admin / password123")
+
+        # Create user role manager dan staff
+
+        if not User.objects.filter(role='manager').exists():
+            User.objects.create_user(
+                username='manager',
+                first_name='Manager',
+                last_name='TokoCoding',
+                email='manager@tokocoding.com',
+                password='password123',
+                role='manager',
+                is_staff=True,
+            )  
+
+            print("Default manager user created: manager / password123")
+
+        if not User.objects.filter(role='staff').exists():
+            User.objects.create_user(
+                username='staff',
+                first_name='Staff',
+                last_name='TokoCoding',
+                email='staff@tokocoding.com',
+                password='password123',
+                role='staff',
+                is_staff=True,
+            )
+
+            print("Default staff user created: staff / password123")
