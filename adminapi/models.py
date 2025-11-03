@@ -61,7 +61,7 @@ class Invitation(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.expires_at:
-            self.expires_at = timezone.now() + timezone.timedelta(days=3)
+            self.expires_at = timezone.now() + timezone.timedelta(days=1)
         super().save(*args, **kwargs)
 
 
