@@ -56,7 +56,7 @@ class InvitationViewSet(viewsets.GenericViewSet,
         serializer.is_valid(raise_exception=True)
         invitation = serializer.save(inviter=request.user)
 
-        invite_link = f"{request.scheme}://{request.get_host()}/api/invitations/accept/?token={invitation.token}"
+        invite_link = f"https://frontend-rbac.tokocoding.com/api/invitations/accept/?token={invitation.token}"
         subject = 'You are invited'
         message = f"You have been invited. Click to accept: {invite_link}\nThis link expires: {invitation.expires_at}"
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [invitation.email])
