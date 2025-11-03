@@ -12,6 +12,7 @@ services:
       DB_PASSWORD: rabc-doni-999
       DB_HOST: db_api_doni
       DB_PORT: 3306
+      CORS_ALLOWED_ORIGIN: https://rabc-doni-frontend.tokocoding.com
     depends_on:
       - db_api_doni
     networks:

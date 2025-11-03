@@ -44,12 +44,14 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'drf_spectacular',
     'drf_spectacular_sidecar',
+    'corsheaders',
     'adminapi'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -178,3 +180,12 @@ SPECTACULAR_SETTINGS = {
 # Email for invitations (development)
 EMAIL_BACKEND = os.getenv('DJANGO_EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
 DEFAULT_FROM_EMAIL = 'no-reply@tokocoding.com'
+
+CORS_ALLOWED_ORIGINS = [
+    os.getenv("CORS_ALLOWED_ORIGIN", "http://localhost:3000"),
+]
+
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization'
+]
